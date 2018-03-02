@@ -43,7 +43,7 @@ function g3setup_menu() {
     'access arguments' => array('administer site configuration'),
     'file' => 'g3setup.pages.inc',
     'menu' => 'menu-groupanizer-menu',
-    'weight' => 0,
+    'weight' => -99,
   );
 
   return $items;
