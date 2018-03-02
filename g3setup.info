@@ -1,0 +1,8 @@
+name = Groupanizer G3 Setup
+description = Guides users through setup, providing hooks to modules that implement setup
+core = 7.x
+package = Groupanizer Sing
+version = 7.x-1.0
+project = g3setup
+l10n path = http://local.groupanizer.com/sites/local.groupanizer.com/files/l10n_packager/%core/%project/%project-%release.%language.po
+

@@ -1,0 +1,29 @@
+/* progress bar */
+.g3setup-container {
+  background-color: #f9d8d8;
+  margin-bottom: 20px;
+  border: 1px solid grey;
+}
+.g3setup-progress {
+  background-color: #cef5ce;
+  padding: 5px;
+}
+.g3setup-message {
+  position: absolute;
+  top: 0;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+}
+
+/* check icons on setup page */
+.status-icon {
+  text-align: center;
+}
+.fa {
+  font-size: 24pt !important;
+  color: lightgrey;
+}
+.done {
+  color: green;
+}

@@ -1,0 +1,12 @@
+<?php
+
+function g3setup_install() {
+}
+
+function g3setup_uninstall() {
+}
+
+
+
+
+

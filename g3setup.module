@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * Implements hook_page_alter
+ * @purpose put the progress bar into the highlight area, for site admins
+ */
+function g3setup_page_alter(&$page) {
+
+  if( user_access('administer site configuration') && !variable_get('g3setup_hide_progress', FALSE) ) {
+
+
+    drupal_add_css(drupal_get_path('module', 'g3setup') . '/g3setup.css');
+
+    $status = g3setup_status();
+    $done = 0;
+    foreach($status AS $s) {
+      if( isset($s['status']) && $s['status'] == 'done' ) $done++;
+    }
+    $pct = number_format($done / sizeof($status) * 100, 0);
+    $message = t("Setup: You've completed @done of @total setup steps.", array('@done'=>$done, '@total'=>sizeof($status)));
+    $message .= " " . l("Click here for details", 'g/admin/g3setup');
+
+    $page['highlighted']['setup_progress'] = array(
+      '#markup' => 
+       "<div class='g3setup-container'>
+          <div class='g3setup-progress' style='width: {$pct}%'>&nbsp;</div>
+          <div class='g3setup-message'>{$message}</div>
+        </div>",
+      '#weight' => -10,
+    );
+
+  }
+}
+
+/**
+ * Implements hook_menu
+ */
+function g3setup_menu() {
+
+  $items['g/admin/g3setup'] = array(
+    'title' => 'Setup',
+    'page callback' => 'g3setup_main_page',
+    'access arguments' => array('administer site configuration'),
+    'file' => 'g3setup.pages.inc',
+    'menu' => 'menu-groupanizer-menu',
+    'weight' => 0,
+  );
+
+  return $items;
+}
+
+/**
+ * Get all setup status information
+ * @return array of setup items with status, descriptions etc.
+ */
+function g3setup_status() {
+  $status = module_invoke_all('g3setup');
+  uasort($status, function($a, $b) {
+    if( $a['weight'] == $b['weight'] ) return 0;
+    return ($a['weight'] < $b['weight']) ? -1 : 1;
+  });
+  return $status;
+}
+
+
+
+/**
+ * track form submissions by writing variables
+ */
+function g3setup_track_form_submissions($form, $form_state) {
+  variable_set('g3setup_' . $form['#form_id'], TRUE);
+}
