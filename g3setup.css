@@ -17,13 +17,32 @@
 }
 
 /* check icons on setup page */
-.status-icon {
+.page-g-admin-g3setup .status-icon {
   text-align: center;
 }
-.fa {
+.g3setup-status-icon .fa {
   font-size: 24pt !important;
   color: lightgrey;
 }
-.done {
+.page-g-admin-g3setup .done {
   color: green;
+}
+
+/* text formats on setup page */
+.g3setup-description {
+  line-height: 1.2em;
+}
+.g3setup-link {
+  font-style: underline;
+}
+.g3setup-navigation {
+  font-size: 8pt;
+  font-style: italic;
+  color: grey;
+}
+
+/* congratulations message */
+.g3setup-congrats {
+  font-size: 18pt;
+  color: #EE5126;
 }

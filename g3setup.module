@@ -1,5 +1,10 @@
 <?php
 
+function g3setup_form_alter($form, $form_state, $form_id) {
+  //dpm($form_id);
+}
+
+
 /**
  * Implements hook_page_alter
  * @purpose put the progress bar into the highlight area, for site admins
@@ -17,8 +22,8 @@ function g3setup_page_alter(&$page) {
       if( isset($s['status']) && $s['status'] == 'done' ) $done++;
     }
     $pct = number_format($done / sizeof($status) * 100, 0);
-    $message = t("Setup: You've completed @done of @total setup steps.", array('@done'=>$done, '@total'=>sizeof($status)));
-    $message .= " " . l("Click here for details", 'g/admin/g3setup');
+    $message = t("Setup progress @pct%", array('@pct'=>number_format($done/sizeof($status)*100, 0)));
+    $message .= " - " . l("Click here", 'g/admin/g3setup');
 
     $page['highlighted']['setup_progress'] = array(
       '#markup' => 

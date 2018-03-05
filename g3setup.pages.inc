@@ -12,34 +12,53 @@ function g3setup_main_page() {
   // let's send these links back to setup if we can
   $dest = drupal_get_destination();
 
-  $header = array(t('Status'), t('Description'));
+  $header = array(t('Status'), t('Description'), '');
 
   $done_cnt = 0;
   foreach($status AS $s) {
-    // status
+
+    // status icon
     if( !isset($s['status'] ) ) $s['status'] = 'pending';
     if( $s['status'] == 'done' ) {
-      $status_icon = "<i class='fa fa-check-circle done'></i>";
+      $status_icon = "<span class='g3setup-status-icon'><i class='fa fa-check-circle done'></i></span>";
       $done_cnt++;
     } else {
-      $status_icon = "<i class='fa fa-circle pending'></i>";
+      $status_icon = "<span class='g3setup-status-icon'><i class='fa fa-circle pending'></i></span>";
     }
 
-    // name
-    $name = isset($s['link']) ? l($s['name'], $s['link'], array('query'=>$dest)) : $s['name'];
+    // text description
+    $text = '';
+    $text .= "<div class='g3setup-link'>";
+    $text .= isset($s['icon']) ? $s['icon'] : "<i class='fa fa-square'></i>";
+    $text .= "&nbsp";
+    $text .= isset($s['link']) ? l($s['name'], $s['link'], array('query'=>$dest)) : $s['name'];
+    $text .= "</div>";
+    $text .= "<div class='g3setup-description'>{$s['description']}</div>";
+    if( isset($s['navigation']) ) {
+      $text .= "<div class='g3setup-navigation'>" . t("Find this later at") . " {$s['navigation']}</div>";
+    }
+
+    // button
+    $button = '';
+    if( isset($s['manual-completion']) && $s['status'] != 'done' ) {
+      $form = drupal_get_form($s['manual-completion']);
+      $button = drupal_render($form);
+    }
+
     $rows[] = array(
-      array(
-        'data' => $status_icon,
-        'class' => array('status-icon'),
-      ),
-      $name . '<br>' . $s['description'],
+      array( 'data' => $status_icon, 'class' => array('status-icon')),
+      array( 'data' => $text, 'class' => array('status-text')),
+      array( 'data' => $button, 'class' => array('status-button')),
     );
+
   }
 
   // progress message
-  $progress_message = t("You have completed @done of @total steps. Click on the step names below to configure each section.", array('@done'=>$done_cnt, '@total'=>sizeof($status)));
-  if( $done_cnt >= sizeof($status) ) {
-    $progress_message .= " " . t("Nicely done!");
+  if( sizeof($status) == $done_cnt ) {
+    $progress_message = "<span class='g3setup-congrats'>" . t("Congratulations! You have completed the setup.") . "</span><br>";
+    $progress_message .= t("You can hide the progress bar with the button at the bottom of this page.");
+  } else {
+    $progress_message = t("Click on the step names below to configure each section. Refer to our !qsg for setup recommendations for your choir type.", array('!qsg' => l("Quick start guide", 'https://support.choirgenius.com/content/quick-start-setup-guides', array('absolute'=>TRUE))));
   }
   $ra['progress'] = array(
     '#markup' => $progress_message,
