@@ -23,7 +23,7 @@ function g3setup_page_alter(&$page) {
     }
     $pct = number_format($done / sizeof($status) * 100, 0);
     $message = t("Setup progress @pct%", array('@pct'=>number_format($done/sizeof($status)*100, 0)));
-    $message .= " - " . l("Click here", 'g/admin/g3setup');
+    $message .= " - " . l(t("Click here"), 'g/admin/g3setup');
 
     $page['highlighted']['setup_progress'] = array(
       '#markup' => 
